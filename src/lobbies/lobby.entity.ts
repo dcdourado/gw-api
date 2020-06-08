@@ -14,7 +14,10 @@ export class Lobby {
   id: number;
 
   @Column()
-  leaderId: string;
+  password: string;
+
+  @Column()
+  leaderId: number;
 
   @ManyToMany((type) => User)
   @JoinTable()
@@ -22,4 +25,7 @@ export class Lobby {
 
   @Column({ default: 0 })
   status: number;
+
+  @Column()
+  size: number;
 }

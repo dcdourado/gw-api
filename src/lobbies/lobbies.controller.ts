@@ -1,11 +1,21 @@
-import { Req, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Req,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 import { Lobby } from './lobby.entity';
-import { UsersService } from './users.service';
+import { LobbiesService } from './lobbies.service';
 
-@Controller('users')
+@UseGuards(AuthGuard('jwt'))
+@Controller('lobbies')
 export class LobbiesController {
-  constructor(private readonly lobbiesService: UsersService) {}
+  constructor(private readonly lobbiesService: LobbiesService) {}
 
   @Post()
   create(@Req() req): Promise<Lobby> {
@@ -14,7 +24,7 @@ export class LobbiesController {
 
   @Get()
   findAll(): Promise<Lobby[]> {
-    return this.lobbiesService.findAll();
+    return this.lobbiesService.findAllAvailable();
   }
 
   @Get(':id')
