@@ -6,11 +6,14 @@ import {
   Param,
   Post,
   UseGuards,
+  Put,
+  Body,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { Lobby } from './lobby.entity';
 import { LobbiesService } from './lobbies.service';
+import { JoinLobbyDto } from './dto/join-lobby.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('lobbies')
@@ -20,6 +23,15 @@ export class LobbiesController {
   @Post()
   create(@Req() req): Promise<Lobby> {
     return this.lobbiesService.create(req.user);
+  }
+
+  @Put(':id/join')
+  join(
+    @Param('id') id: string,
+    @Req() req,
+    @Body() joinLobbyDto: JoinLobbyDto,
+  ): Promise<Lobby> {
+    return this.lobbiesService.join(id, req.user, joinLobbyDto);
   }
 
   @Get()
