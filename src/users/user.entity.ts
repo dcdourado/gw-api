@@ -5,12 +5,12 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
-  @Column({ default: 0 })
+  @Column({ default: 0, unsigned: true })
   mmr: number;
 }
