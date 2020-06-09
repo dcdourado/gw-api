@@ -11,6 +11,6 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ unsigned: true })
+  @Column({ default: 0, unsigned: true })
   mmr: number;
 }
