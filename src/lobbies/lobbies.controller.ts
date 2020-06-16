@@ -34,6 +34,11 @@ export class LobbiesController {
     return this.lobbiesService.join(id, req.user, joinLobbyDto);
   }
 
+  @Put(':id/leave')
+  leave(@Param('id') id: string, @Req() req): Promise<Lobby> {
+    return this.lobbiesService.leave(id, req.user);
+  }
+
   @Get()
   findAll(): Promise<Lobby[]> {
     return this.lobbiesService.findAllAvailable();
@@ -45,7 +50,7 @@ export class LobbiesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.lobbiesService.remove(id);
+  remove(@Param('id') id: string, @Req() req): Promise<void> {
+    return this.lobbiesService.remove(id, req.user);
   }
 }

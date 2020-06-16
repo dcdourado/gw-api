@@ -58,6 +58,38 @@ export class LobbiesService {
     return this.lobbiesRepository.save(lobby);
   }
 
+  async leave(id: string, user: User): Promise<Lobby> {
+    const lobby = await this.findOne(id);
+
+    if (!lobby) {
+      console.log('Lobby not found');
+      throw new UnauthorizedException();
+    }
+
+    const isPlayerInLobby = lobby.players.find(
+      (player) => player.id === user.id,
+    );
+    if (!isPlayerInLobby) {
+      console.log('User is not in this lobby');
+      throw new UnauthorizedException();
+    }
+
+    if (lobby.players.length <= 1) {
+      console.log('Cannot leave a lobby with just 1 player');
+      throw new UnauthorizedException();
+    }
+
+    const newLobbyPlayers = lobby.players.filter(
+      (player) => player.id !== user.id,
+    );
+    lobby.players = newLobbyPlayers;
+    if (lobby.leaderId === user.id) {
+      lobby.leaderId = lobby.players[0].id;
+    }
+
+    return this.lobbiesRepository.save(lobby);
+  }
+
   findAll(): Promise<Lobby[]> {
     return this.lobbiesRepository.find();
   }
@@ -75,7 +107,19 @@ export class LobbiesService {
     });
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string, user: User): Promise<void> {
+    const lobby = await this.findOne(id);
+
+    if (lobby.players.length !== 1) {
+      console.log('Lobby has another players');
+      return;
+    }
+
+    if (lobby.players[0].id !== user.id) {
+      console.log('User is not in this lobby');
+      return;
+    }
+
     await this.lobbiesRepository.delete(id);
   }
 }
