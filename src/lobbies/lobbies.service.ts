@@ -27,20 +27,11 @@ export class LobbiesService {
     return this.lobbiesRepository.save(lobby);
   }
 
-  async join(
-    id: string,
-    user: User,
-    joinLobbyDto: JoinLobbyDto,
-  ): Promise<Lobby> {
+  async join(id: string, user: User): Promise<Lobby> {
     const lobby = await this.findOne(id);
 
     if (!lobby) {
       console.log('Lobby not found');
-      throw new UnauthorizedException();
-    }
-
-    if (lobby.password !== joinLobbyDto.password) {
-      console.log('Wrong lobby pwd');
       throw new UnauthorizedException();
     }
 

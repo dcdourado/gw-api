@@ -26,12 +26,8 @@ export class LobbiesController {
   }
 
   @Put(':id/join')
-  join(
-    @Param('id') id: string,
-    @Req() req,
-    @Body() joinLobbyDto: JoinLobbyDto,
-  ): Promise<Lobby> {
-    return this.lobbiesService.join(id, req.user, joinLobbyDto);
+  join(@Param('id') id: string, @Req() req): Promise<Lobby> {
+    return this.lobbiesService.join(id, req.user);
   }
 
   @Put(':id/leave')
