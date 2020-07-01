@@ -21,7 +21,7 @@ export class LobbiesService {
     lobby.leaderId = leader.id;
     lobby.password = nanoid();
     lobby.players = [leader];
-    lobby.size = 2; // TEMP
+    lobby.size = 5;
     lobby.status = LobbyStatusEnum.AVAILABLE;
 
     return this.lobbiesRepository.save(lobby);
